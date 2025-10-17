@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Honorable Joseph Yule - Action Nationale</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, rgba(245,247,250,0.9) 0%, rgba(195,207,226,0.9) 100%), url('https://photos.app.goo.gl/u6mGM3QEBDkusghT7');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, rgba(107,45,92,0.85) 0%, rgba(142,68,173,0.85) 100%);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+            border-radius: 0 0 20px 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 40px;
+            backdrop-filter: blur(5px);
+        }
+        
+        .profile-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .profile-image {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            border: 5px solid white;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            background-image: url('https://photos.app.goo.gl/fnwojgqqauJLDQNj7');
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .profile-info {
+            text-align: left;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .title {
+            font-size: 1.3em;
+            opacity: 0.9;
+            margin-bottom: 15px;
+        }
+        
+        /* Section Carte Interactive */
+        #carte {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            margin-bottom: 40px;
+            backdrop-filter: blur(10px);
+        }
+        
+        #map {
+            height: 500px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-top: 20px;
+        }
+        
+        .map-title {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #6b2d5c;
+        }
+        
+        /* Section Galerie */
+        #galerie {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            margin-bottom: 40px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .gallery-item {
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            height: 200px;
+        }
+        
+        .gallery-item:hover {
+            transform: scale(1.05);
+        }
+        
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        /* Section Réseaux Sociaux */
+        #reseaux {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            margin-bottom: 40px;
+            backdrop-filter: blur(10px);
+        }
+        
+        h2 {
+            color: #6b2d5c;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 2em;
+        }
+        
+        .section-description {
+            text-align: center;
+            font-size: 1.1em;
+            margin-bottom: 30px;
+            color: #666;
+        }
+        
+        /* Styles pour les boutons des réseaux sociaux */
+        .social-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 40px 0;
+            flex-wrap: wrap;
+        }
+        
+        .social-buttons a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 28px;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background-color: #fff;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .social-buttons a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.5), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s;
+        }
+        
+        .social-buttons a:hover::before {
+            transform: translateX(100%);
+        }
+        
+        .social-buttons a:hover {
+            transform: translateY(-8px) scale(1.1);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+        
+        .whatsapp { 
+            color: #25D366;
+            border: 3px solid #25D366;
+        }
+        
+        .facebook { 
+            color: #1877F2;
+            border: 3px solid #1877F2;
+        }
+        
+        .tiktok { 
+            color: #000;
+            border: 3px solid #000;
+        }
+        
+        .x { 
+            color: #1DA1F2;
+            border: 3px solid #1DA1F2;
+        }
+        
+        .instagram { 
+            color: #E1306C;
+            border: 3px solid #E1306C;
+        }
+        
+        /* Animation d'apparition */
+        .social-buttons a {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.8s ease forwards;
+        }
+        
+        .social-buttons a:nth-child(1) { animation-delay: 0.1s; }
+        .social-buttons a:nth-child(2) { animation-delay: 0.2s; }
+        .social-buttons a:nth-child(3) { animation-delay: 0.3s; }
+        .social-buttons a:nth-child(4) { animation-delay: 0.4s; }
+        .social-buttons a:nth-child(5) { animation-delay: 0.5s; }
+        
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Styles pour la liste des articles */
+        .articles-section {
+            margin-top: 40px;
+        }
+        
+        h3 {
+            color: #6b2d5c;
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 1.8em;
+        }
+        
+        .articles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+        
+        .article-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border-left: 5px solid #6b2d5c;
+        }
+        
+        .article-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        
+        .article-card a {
+            color: #6b2d5c;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1em;
+            display: block;
+            margin-bottom: 10px;
+        }
+        
+        .article-card a:hover {
+            text-decoration: underline;
+        }
+        
+        .source {
+            font-size: 0.9em;
+            color: #666;
+            font-style: italic;
+            margin-top: 10px;
+            display: block;
+        }
+        
+        .region {
+            display: inline-block;
+            background: #6b2d5c;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            margin-bottom: 8px;
+        }
+        
+        /* Section Vidéos */
+        #videos {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            margin-bottom: 40px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .videos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+        
+        .video-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border-left: 5px solid #25D366;
+        }
+        
+        .video-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        
+        /* Section Contact */
+        #contact {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+        
+        .contact-info {
+            font-size: 1.1em;
+            margin: 20px 0;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px;
+            margin-top: 50px;
+            color: #666;
+            border-top: 1px solid rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .profile-info {
+                text-align: center;
+            }
+            
+            .social-buttons a {
+                width: 60px;
+                height: 60px;
+                font-size: 24px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            #reseaux, #contact, #galerie, #carte, #videos {
+                padding: 25px;
+            }
+            
+            body {
+                background-attachment: scroll;
+            }
+            
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            }
+            
+            #map {
+                height: 300px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .social-buttons {
+                gap: 15px;
+            }
+            
+            .social-buttons a {
+                width: 55px;
+                height: 55px;
+                font-size: 22px;
+            }
+            
+            .articles-grid, .videos-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .profile-image {
+                width: 140px;
+                height: 140px;
+            }
+            
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .gallery-item {
+                height: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="profile-header">
+                <div class="profile-image"></div>
+                <div class="profile-info">
+                    <h1>Honorable Joseph Yule</h1>
+                    <div class="title">Député Provincial de Kisangani</div>
+                    <p>Engagé pour le développement de la Tshopo et de toute la RDC</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Section Carte Interactive -->
+        <section id="carte">
+            <h2>Carte des Actions Nationales</h2>
+            <p class="section-description">Découvrez les projets et interventions de l'honorable Joseph Yule à travers la République Démocratique du Congo</p>
+            
+            <div id="map"></div>
+        </section>
+
+        <!-- Section Galerie -->
+        <section id="galerie">
+            <h2>Galerie Photos</h2>
+            <p class="section-description">Quelques moments forts de son engagement politique et communautaire</p>
+            
+            <div class="gallery-grid">
+                <div class="gallery-item">
+                    <img src="https://photos.app.goo.gl/u6mGM3QEBDkusghT7" alt="Joseph Yule en action">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://photos.app.goo.gl/xpFuuLoDBj9FEjtU8" alt="Joseph Yule avec la communauté">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://photos.app.goo.gl/F33NhXvYM5JUbjwEA" alt="Joseph Yule en réunion">
+                </div>
+            </div>
+        </section>
+
+        <!-- Section Réseaux Sociaux -->
+        <section id="reseaux">
+            <h2>Suivez l'honorable Joseph Yule</h2>
+            <p class="section-description">Retrouvez ses engagements, ses actions et ses actualités sur les réseaux et dans la presse</p>
+
+            <div class="social-buttons">
+                <a href="https://wa.me/243000000000" class="whatsapp" title="WhatsApp">📱</a>
+                <a href="https://facebook.com/josephyule" class="facebook" title="Facebook">👥</a>
+                <a href="https://www.tiktok.com/@boyomarevolution" class="tiktok" title="TikTok">🎵</a>
+                <a href="https://twitter.com/yule_joseph" class="x" title="X (Twitter)">𝕏</a>
+                <a href="https://instagram.com/joseph_yule" class="instagram" title="Instagram">📸</a>
+            </div>
+
+            <div class="articles-section">
+                <h3>Articles et Interventions Nationales</h3>
+                <div class="articles-grid">
+                    <div class="article-card">
+                        <span class="region">KISANGANI</span>
+                        <a href="https://lumiernews.net/tshopo-grace-au-lobbyng-payant-du-depute-provincial-joseph-yule-la-commune-lubunga-va-beneficier-de-15-km-des-routes-asphaltees-et-leclairage-public/">
+                            Lobbying pour les infrastructures à Lubunga
+                        </a>
+                        <span class="source">Lumière News</span>
+                    </div>
+                    
+                    <div class="article-card">
+                        <span class="region">LUBUNGA</span>
+                        <a href="https://www.laclocheducongo.com/2024/11/kisangani-15-kilometres-de-routes-de.html">
+                            Routes et éclairage public à Lubunga
+                        </a>
+                        <span class="source">La Cloche du Congo</span>
+                    </div>
+                    
+                    <div class="article-card">
+                        <span class="region">RDC NATIONAL</span>
+                        <a href="https://journalofficiel.cd/rech/1/0">
+                            Recherche d'actes officiels
+                        </a>
+                        <span class="source">Journal Officiel RDC</span>
+                    </div>
+                    
+                    <div class="article-card">
+                        <span class="region">GOUVERNEMENT</span>
+                        <a href="https://www.congo1.cd/2024/05/rdc-le-gouvernement-suminwa-relevera.html">
+                            Réaction au gouvernement Suminwa
+                        </a>
+                        <span class="source">Congo1.cd</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section Vidéos -->
+        <section id="videos">
+            <h2>Vidéos Officielles</h2>
+            <p class="section-description">Retrouvez les interventions médiatiques et les moments forts</p>
+            
+            <div class="videos-grid">
+                <div class="video-card">
+                    <a href="https://www.tiktok.com/@boyomarevolution/video/7326789284277587205">
+                        Dépêchez-vous de découvrir les députés de Tshopo Opala
+                    </a>
+                    <span class="source">TikTok - Boyoma Révolution</span>
+                </div>
+                
+                <div class="video-card">
+                    <a href="https://facebook.com/boyomarevolution1/videos/401441839079586/">
+                        Désormais Honorable Joseph Yule - The 666 Miliki
+                    </a>
+                    <span class="source">Facebook - Boyoma Révolution</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact">
+            <h2>Contact</h2>
+            <div class="contact-info">
+                <p>Pour toute information ou sollicitation :</p>
+                <p>📧 Email: contact@josephyule.cd</p>
+                <p>📍 Kisangani, Tshopo - RDC</p>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Honorable Joseph Yule - Tous droits réservés</p>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // Initialisation de la carte
+        var map = L.map('map').setView([-2.8797, 23.6560], 5);
+        
+        // Ajout des tuiles OpenStreetMap
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Ajout des marqueurs pour les projets
+        L.marker([0.5153, 25.1900]).addTo(map)
+            .bindPopup("<b>Lubunga – Kisangani</b><br>15 km de routes asphaltées et éclairage public")
+            .openPopup();
+
+        L.marker([-2.5000, 28.8600]).addTo(map)
+            .bindPopup("<b>Bukavu</b><br>Consultation sur la sécurité fluviale");
+
+        L.marker([2.765, 24.990]).addTo(map)
+            .bindPopup("<b>Bas-Uélé</b><br>Soutien aux chefs coutumiers");
+
+        L.marker([-4.3000, 15.3000]).addTo(map)
+            .bindPopup("<b>Kinshasa</b><br>Participation aux sessions parlementaires");
+
+        L.marker([-1.6700, 29.2200]).addTo(map)
+            .bindPopup("<b>Goma</b><br>Échanges sur le développement régional");
+
+        // Animation au défilement
+        document.addEventListener('DOMContentLoaded', function() {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            // Observer les cartes d'articles
+            document.querySelectorAll('.article-card').forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.6s ease, transform 0.6s ease
