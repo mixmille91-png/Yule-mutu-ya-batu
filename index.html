@@ -3,615 +3,686 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Honorable Joseph Yule - Action Nationale</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <title>Honorable Joseph Yule Mutu ya Batu - Député Provincial de la Tshopo</title>
+    <link rel="icon" type="image/x-icon" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTE2IDBDNy4xNjM0NCAwIDAgNy4xNjM0NCAwIDE2QzAgMjQuODM2NiA3LjE2MzQ0IDMyIDE2IDMyQzI0LjgzNjYgMzIgMzIgMjQuODM2NiAzMiAxNkMzMiA3LjE2MzQ0IDI0LjgzNjYgMCAxNiAwWk0xNiAyOC4xNkM5LjM3MTIgMjguMTYgNCAyMi43ODg4IDQgMTZDNCA5LjIxMTIgOS4zNzEyIDMuODQgMTYgMy44NEMyMi42Mjg4IDMuODQgMjggOS4yMTEyIDI4IDE2QzI4IDIyLjc4ODggMjIuNjI4OCAyOC4xNiAxNiAyOC4xNloiIGZpbGw9IiMxYTRkMmUiLz4KPHBhdGggZD0iTTIwLjQ4IDEwLjI0SDExLjUyVjIxLjc2SDIwLjQ4VjEyLjhoLTMuMlYxOS4zNkgxNC43MlYxMi44SDIwLjQ4VjEwLjI0WiIgZmlsbD0iIzFhNGQyZSIvPgo8L3N2Zz4K">
     <style>
+        /* Variables CSS */
+        :root {
+            --primary-color: #1a4d2e;
+            --secondary-color: #4a7c59;
+            --accent-color: #ffd166;
+            --text-color: #333;
+            --light-color: #f8f9fa;
+            --dark-color: #1d1d1d;
+            --spacing-sm: 0.5rem;
+            --spacing-md: 1rem;
+            --spacing-lg: 2rem;
+            --spacing-xl: 4rem;
+            --border-radius: 4px;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        /* Reset et styles de base */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
-            color: #333;
-            background: linear-gradient(135deg, rgba(245,247,250,0.9) 0%, rgba(195,207,226,0.9) 100%), url('https://photos.app.goo.gl/u6mGM3QEBDkusghT7');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            min-height: 100vh;
+            color: var(--text-color);
+            background-color: var(--light-color);
         }
-        
+
+        h1, h2, h3, h4 {
+            margin-bottom: var(--spacing-md);
+            line-height: 1.2;
+            color: var(--primary-color);
+        }
+
+        p {
+            margin-bottom: var(--spacing-md);
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+            transition: var(--transition);
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
         .container {
+            width: 90%;
             max-width: 1200px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 0 var(--spacing-md);
         }
-        
-        header {
-            background: linear-gradient(135deg, rgba(107,45,92,0.85) 0%, rgba(142,68,173,0.85) 100%);
-            color: white;
-            padding: 60px 20px;
+
+        .section {
+            padding: var(--spacing-xl) 0;
+        }
+
+        .section-title {
             text-align: center;
-            border-radius: 0 0 20px 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            margin-bottom: 40px;
-            backdrop-filter: blur(5px);
+            margin-bottom: var(--spacing-lg);
+            position: relative;
         }
-        
-        .profile-header {
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 3px;
+            background-color: var(--accent-color);
+            margin: var(--spacing-sm) auto;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: var(--spacing-sm) var(--spacing-lg);
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-3px);
+            box-shadow: var(--box-shadow);
+        }
+
+        /* Header et Navigation */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            transition: var(--transition);
+        }
+
+        header.scrolled {
+            background-color: rgba(255, 255, 255, 0.98);
+            padding: 0.5rem 0;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--spacing-md) 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        .logo img {
+            height: 50px;
+            margin-right: var(--spacing-sm);
+        }
+
+        .nav-menu {
+            display: flex;
+        }
+
+        .nav-menu li {
+            margin-left: var(--spacing-lg);
+        }
+
+        .nav-menu a {
+            font-weight: 600;
+            position: relative;
+        }
+
+        .nav-menu a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--accent-color);
+            transition: var(--transition);
+        }
+
+        .nav-menu a:hover::after,
+        .nav-menu a.active::after {
+            width: 100%;
+        }
+
+        .hamburger {
+            display: none;
+            cursor: pointer;
+        }
+
+        .hamburger div {
+            width: 25px;
+            height: 3px;
+            background-color: var(--primary-color);
+            margin: 5px;
+            transition: var(--transition);
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1518837695005-2083093ee35b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1926&q=80') no-repeat center center/cover;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 30px;
-            flex-wrap: wrap;
-        }
-        
-        .profile-image {
-            width: 180px;
-            height: 180px;
-            border-radius: 50%;
-            border: 5px solid white;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            background-image: url('https://photos.app.goo.gl/fnwojgqqauJLDQNj7');
-            background-size: cover;
-            background-position: center;
-        }
-        
-        .profile-info {
-            text-align: left;
-        }
-        
-        h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-        
-        .title {
-            font-size: 1.3em;
-            opacity: 0.9;
-            margin-bottom: 15px;
-        }
-        
-        /* Section Carte Interactive */
-        #carte {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-            margin-bottom: 40px;
-            backdrop-filter: blur(10px);
-        }
-        
-        #map {
-            height: 500px;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            margin-top: 20px;
-        }
-        
-        .map-title {
             text-align: center;
-            margin-bottom: 20px;
-            color: #6b2d5c;
+            color: white;
+            position: relative;
         }
-        
-        /* Section Galerie */
-        #galerie {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-            margin-bottom: 40px;
-            backdrop-filter: blur(10px);
+
+        .hero-content {
+            max-width: 800px;
+            padding: var(--spacing-lg);
         }
-        
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: var(--spacing-md);
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: var(--spacing-lg);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        /* À Propos Section */
+        .about {
+            background-color: white;
+        }
+
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-lg);
+            align-items: center;
+        }
+
+        .about-image {
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+        }
+
+        .about-image img {
+            width: 100%;
+            height: auto;
+            transition: var(--transition);
+        }
+
+        .about-image:hover img {
+            transform: scale(1.03);
+        }
+
+        .about-text h2 {
+            margin-bottom: var(--spacing-md);
+        }
+
+        /* Activités Section */
+        .activities {
+            background-color: #f8f9fa;
+        }
+
+        .activities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: var(--spacing-lg);
+        }
+
+        .activity-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+        }
+
+        .activity-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .activity-image {
+            height: 200px;
+            overflow: hidden;
+        }
+
+        .activity-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .activity-card:hover .activity-image img {
+            transform: scale(1.1);
+        }
+
+        .activity-content {
+            padding: var(--spacing-lg);
+        }
+
+        /* Galerie Section */
+        .gallery {
+            background-color: white;
+        }
+
         .gallery-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-top: 30px;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: var(--spacing-md);
         }
-        
+
         .gallery-item {
-            border-radius: 15px;
+            position: relative;
             overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease;
-            height: 200px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            aspect-ratio: 1;
         }
-        
-        .gallery-item:hover {
-            transform: scale(1.05);
-        }
-        
+
         .gallery-item img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            transition: var(--transition);
         }
-        
-        /* Section Réseaux Sociaux */
-        #reseaux {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-            margin-bottom: 40px;
-            backdrop-filter: blur(10px);
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
         }
-        
-        h2 {
-            color: #6b2d5c;
-            text-align: center;
-            margin-bottom: 20px;
-            font-size: 2em;
-        }
-        
-        .section-description {
-            text-align: center;
-            font-size: 1.1em;
-            margin-bottom: 30px;
-            color: #666;
-        }
-        
-        /* Styles pour les boutons des réseaux sociaux */
-        .social-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin: 40px 0;
-            flex-wrap: wrap;
-        }
-        
-        .social-buttons a {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
-            font-size: 28px;
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            background-color: #fff;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .social-buttons a::before {
-            content: '';
+
+        .gallery-overlay {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            border-radius: 50%;
-            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.5), transparent);
-            transform: translateX(-100%);
-            transition: transform 0.6s;
-        }
-        
-        .social-buttons a:hover::before {
-            transform: translateX(100%);
-        }
-        
-        .social-buttons a:hover {
-            transform: translateY(-8px) scale(1.1);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
-        }
-        
-        .whatsapp { 
-            color: #25D366;
-            border: 3px solid #25D366;
-        }
-        
-        .facebook { 
-            color: #1877F2;
-            border: 3px solid #1877F2;
-        }
-        
-        .tiktok { 
-            color: #000;
-            border: 3px solid #000;
-        }
-        
-        .x { 
-            color: #1DA1F2;
-            border: 3px solid #1DA1F2;
-        }
-        
-        .instagram { 
-            color: #E1306C;
-            border: 3px solid #E1306C;
-        }
-        
-        /* Animation d'apparition */
-        .social-buttons a {
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
             opacity: 0;
-            transform: translateY(30px);
-            animation: fadeInUp 0.8s ease forwards;
+            transition: var(--transition);
         }
-        
-        .social-buttons a:nth-child(1) { animation-delay: 0.1s; }
-        .social-buttons a:nth-child(2) { animation-delay: 0.2s; }
-        .social-buttons a:nth-child(3) { animation-delay: 0.3s; }
-        .social-buttons a:nth-child(4) { animation-delay: 0.4s; }
-        .social-buttons a:nth-child(5) { animation-delay: 0.5s; }
-        
-        @keyframes fadeInUp {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+
+        .gallery-item:hover .gallery-overlay {
+            opacity: 1;
         }
-        
-        /* Styles pour la liste des articles */
-        .articles-section {
-            margin-top: 40px;
-        }
-        
-        h3 {
-            color: #6b2d5c;
-            text-align: center;
-            margin-bottom: 25px;
-            font-size: 1.8em;
-        }
-        
-        .articles-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-            margin-top: 20px;
-        }
-        
-        .article-card {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
-            border-left: 5px solid #6b2d5c;
-        }
-        
-        .article-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-        }
-        
-        .article-card a {
-            color: #6b2d5c;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 1.1em;
-            display: block;
-            margin-bottom: 10px;
-        }
-        
-        .article-card a:hover {
-            text-decoration: underline;
-        }
-        
-        .source {
-            font-size: 0.9em;
-            color: #666;
-            font-style: italic;
-            margin-top: 10px;
-            display: block;
-        }
-        
-        .region {
-            display: inline-block;
-            background: #6b2d5c;
+
+        .gallery-overlay i {
             color: white;
-            padding: 3px 8px;
-            border-radius: 12px;
-            font-size: 0.8em;
-            margin-bottom: 8px;
+            font-size: 2rem;
         }
-        
-        /* Section Vidéos */
-        #videos {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-            margin-bottom: 40px;
-            backdrop-filter: blur(10px);
+
+        /* Lightbox */
+        .lightbox {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
         }
-        
-        .videos-grid {
+
+        .lightbox.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .lightbox-content {
+            max-width: 90%;
+            max-height: 90%;
+            position: relative;
+        }
+
+        .lightbox-content img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+
+        .lightbox-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+        }
+
+        .lightbox-prev {
+            left: 20px;
+        }
+
+        .lightbox-next {
+            right: 20px;
+        }
+
+        /* Contact Section */
+        .contact {
+            background-color: #f8f9fa;
+        }
+
+        .contact-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-            margin-top: 20px;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-lg);
         }
-        
-        .video-card {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
-            border-left: 5px solid #25D366;
-        }
-        
-        .video-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-        }
-        
-        /* Section Contact */
-        #contact {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-            text-align: center;
-            backdrop-filter: blur(10px);
-        }
-        
+
         .contact-info {
-            font-size: 1.1em;
-            margin: 20px 0;
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-md);
         }
-        
+
+        .contact-item {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--spacing-md);
+        }
+
+        .contact-icon {
+            background-color: var(--primary-color);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .contact-form {
+            background-color: white;
+            padding: var(--spacing-lg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+
+        .form-group {
+            margin-bottom: var(--spacing-md);
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: var(--spacing-sm);
+            font-weight: 600;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: var(--spacing-sm);
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-family: inherit;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(26, 77, 46, 0.2);
+        }
+
+        textarea.form-control {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        /* Footer */
         footer {
+            background-color: var(--dark-color);
+            color: white;
+            padding: var(--spacing-xl) 0 var(--spacing-md);
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--spacing-lg);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .footer-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: var(--spacing-md);
+            display: flex;
+            align-items: center;
+        }
+
+        .footer-logo img {
+            height: 40px;
+            margin-right: var(--spacing-sm);
+        }
+
+        .footer-links h3,
+        .footer-contact h3 {
+            margin-bottom: var(--spacing-md);
+            color: var(--accent-color);
+        }
+
+        .footer-links ul li {
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .footer-links a:hover {
+            color: var(--accent-color);
+        }
+
+        .footer-contact p {
+            margin-bottom: var(--spacing-sm);
+            display: flex;
+            align-items: center;
+        }
+
+        .footer-contact i {
+            margin-right: var(--spacing-sm);
+            color: var(--accent-color);
+        }
+
+        .footer-bottom {
             text-align: center;
-            padding: 30px;
-            margin-top: 50px;
-            color: #666;
-            border-top: 1px solid rgba(255,255,255,0.3);
-            background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(10px);
+            padding-top: var(--spacing-md);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
-        
-        /* Responsive */
+
+        .social-links {
+            display: flex;
+            gap: var(--spacing-md);
+            margin-top: var(--spacing-md);
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            transition: var(--transition);
+        }
+
+        .social-link:hover {
+            background-color: var(--accent-color);
+            transform: translateY(-3px);
+        }
+
+        /* Responsive Design */
         @media (max-width: 768px) {
-            .profile-header {
+            .hamburger {
+                display: block;
+            }
+
+            .nav-menu {
+                position: fixed;
+                top: 80px;
+                right: -100%;
+                width: 80%;
+                height: calc(100vh - 80px);
+                background-color: white;
                 flex-direction: column;
-                text-align: center;
+                align-items: center;
+                justify-content: flex-start;
+                padding-top: var(--spacing-xl);
+                transition: var(--transition);
+                box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
             }
-            
-            .profile-info {
-                text-align: center;
+
+            .nav-menu.active {
+                right: 0;
             }
-            
-            .social-buttons a {
-                width: 60px;
-                height: 60px;
-                font-size: 24px;
+
+            .nav-menu li {
+                margin: 0 0 var(--spacing-lg) 0;
             }
-            
-            h1 {
-                font-size: 2em;
+
+            .hero h1 {
+                font-size: 2rem;
             }
-            
-            #reseaux, #contact, #galerie, #carte, #videos {
-                padding: 25px;
-            }
-            
-            body {
-                background-attachment: scroll;
-            }
-            
-            .gallery-grid {
-                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            }
-            
-            #map {
-                height: 300px;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .social-buttons {
-                gap: 15px;
-            }
-            
-            .social-buttons a {
-                width: 55px;
-                height: 55px;
-                font-size: 22px;
-            }
-            
-            .articles-grid, .videos-grid {
+
+            .about-content,
+            .contact-container {
                 grid-template-columns: 1fr;
             }
-            
-            .profile-image {
-                width: 140px;
-                height: 140px;
-            }
-            
-            .gallery-grid {
+
+            .activities-grid {
                 grid-template-columns: 1fr;
             }
-            
-            .gallery-item {
-                height: 150px;
+
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+
+            .hamburger.active div:nth-child(1) {
+                transform: rotate(-45deg) translate(-5px, 6px);
+            }
+
+            .hamburger.active div:nth-child(2) {
+                opacity: 0;
+            }
+
+            .hamburger.active div:nth-child(3) {
+                transform: rotate(45deg) translate(-5px, -6px);
             }
         }
     </style>
 </head>
 <body>
-    <header>
-        <div class="container">
-            <div class="profile-header">
-                <div class="profile-image"></div>
-                <div class="profile-info">
-                    <h1>Honorable Joseph Yule</h1>
-                    <div class="title">Député Provincial de Kisangani</div>
-                    <p>Engagé pour le développement de la Tshopo et de toute la RDC</p>
+    <!-- Header -->
+    <header id="header">
+        <div class="container header-container">
+            <a href="#" class="logo">
+                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAiIGhlaWdodD0iNTAiIHZpZXdCb3g9IjAgMCA1MCA1MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTI1IDBDMTEuMTkyOSAwIDAgMTEuMTkyOSAwIDI1QzAgMzguODA3MSAxMS4xOTI5IDUwIDI1IDUwQzM4LjgwNzEgNTAgNTAgMzguODA3MSA1MCAyNUM1MCAxMS4xOTI5IDM4LjgwNzEgMCAyNSAwWk0yNSA0NEMxMy45NzIgNDQgNSAzNS4wMjggNSAyNUM1IDEyLjk3MiAxMy45NzIgNCAyNSA0QzM2LjAyOCA0IDQ1IDEyLjk3MiA0NSAyNEM0NSAzNS4wMjggMzYuMDI4IDQ0IDI1IDQ0WiIgZmlsbD0iIzFhNGQyZSIvPgo8cGF0aCBkPSJNMzIgMTZIMThWMzRIMzJWMjBIMjVWMzBIMjBWMjBIMjhWMTZaIiBmaWxsPSIjMWE0ZDJlIi8+Cjwvc3ZnPgo=" alt="Logo">
+                <span>Joseph Yule Mutu ya Batu</span>
+            </a>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="#accueil" class="nav-link active">Accueil</a></li>
+                    <li><a href="#apropos" class="nav-link">À Propos</a></li>
+                    <li><a href="#activites" class="nav-link">Activités</a></li>
+                    <li><a href="#galerie" class="nav-link">Galerie</a></li>
+                    <li><a href="#contact" class="nav-link">Contact</a></li>
+                </ul>
+                <div class="hamburger">
+                    <div class="line1"></div>
+                    <div class="line2"></div>
+                    <div class="line3"></div>
                 </div>
-            </div>
+            </nav>
         </div>
     </header>
 
-    <div class="container">
-        <!-- Section Carte Interactive -->
-        <section id="carte">
-            <h2>Carte des Actions Nationales</h2>
-            <p class="section-description">Découvrez les projets et interventions de l'honorable Joseph Yule à travers la République Démocratique du Congo</p>
-            
-            <div id="map"></div>
-        </section>
-
-        <!-- Section Galerie -->
-        <section id="galerie">
-            <h2>Galerie Photos</h2>
-            <p class="section-description">Quelques moments forts de son engagement politique et communautaire</p>
-            
-            <div class="gallery-grid">
-                <div class="gallery-item">
-                    <img src="https://photos.app.goo.gl/u6mGM3QEBDkusghT7" alt="Joseph Yule en action">
-                </div>
-                <div class="gallery-item">
-                    <img src="https://photos.app.goo.gl/xpFuuLoDBj9FEjtU8" alt="Joseph Yule avec la communauté">
-                </div>
-                <div class="gallery-item">
-                    <img src="https://photos.app.goo.gl/F33NhXvYM5JUbjwEA" alt="Joseph Yule en réunion">
-                </div>
-            </div>
-        </section>
-
-        <!-- Section Réseaux Sociaux -->
-        <section id="reseaux">
-            <h2>Suivez l'honorable Joseph Yule</h2>
-            <p class="section-description">Retrouvez ses engagements, ses actions et ses actualités sur les réseaux et dans la presse</p>
-
-            <div class="social-buttons">
-                <a href="https://wa.me/243000000000" class="whatsapp" title="WhatsApp">📱</a>
-                <a href="https://facebook.com/josephyule" class="facebook" title="Facebook">👥</a>
-                <a href="https://www.tiktok.com/@boyomarevolution" class="tiktok" title="TikTok">🎵</a>
-                <a href="https://twitter.com/yule_joseph" class="x" title="X (Twitter)">𝕏</a>
-                <a href="https://instagram.com/joseph_yule" class="instagram" title="Instagram">📸</a>
-            </div>
-
-            <div class="articles-section">
-                <h3>Articles et Interventions Nationales</h3>
-                <div class="articles-grid">
-                    <div class="article-card">
-                        <span class="region">KISANGANI</span>
-                        <a href="https://lumiernews.net/tshopo-grace-au-lobbyng-payant-du-depute-provincial-joseph-yule-la-commune-lubunga-va-beneficier-de-15-km-des-routes-asphaltees-et-leclairage-public/">
-                            Lobbying pour les infrastructures à Lubunga
-                        </a>
-                        <span class="source">Lumière News</span>
-                    </div>
-                    
-                    <div class="article-card">
-                        <span class="region">LUBUNGA</span>
-                        <a href="https://www.laclocheducongo.com/2024/11/kisangani-15-kilometres-de-routes-de.html">
-                            Routes et éclairage public à Lubunga
-                        </a>
-                        <span class="source">La Cloche du Congo</span>
-                    </div>
-                    
-                    <div class="article-card">
-                        <span class="region">RDC NATIONAL</span>
-                        <a href="https://journalofficiel.cd/rech/1/0">
-                            Recherche d'actes officiels
-                        </a>
-                        <span class="source">Journal Officiel RDC</span>
-                    </div>
-                    
-                    <div class="article-card">
-                        <span class="region">GOUVERNEMENT</span>
-                        <a href="https://www.congo1.cd/2024/05/rdc-le-gouvernement-suminwa-relevera.html">
-                            Réaction au gouvernement Suminwa
-                        </a>
-                        <span class="source">Congo1.cd</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Section Vidéos -->
-        <section id="videos">
-            <h2>Vidéos Officielles</h2>
-            <p class="section-description">Retrouvez les interventions médiatiques et les moments forts</p>
-            
-            <div class="videos-grid">
-                <div class="video-card">
-                    <a href="https://www.tiktok.com/@boyomarevolution/video/7326789284277587205">
-                        Dépêchez-vous de découvrir les députés de Tshopo Opala
-                    </a>
-                    <span class="source">TikTok - Boyoma Révolution</span>
-                </div>
-                
-                <div class="video-card">
-                    <a href="https://facebook.com/boyomarevolution1/videos/401441839079586/">
-                        Désormais Honorable Joseph Yule - The 666 Miliki
-                    </a>
-                    <span class="source">Facebook - Boyoma Révolution</span>
-                </div>
-            </div>
-        </section>
-
-        <section id="contact">
-            <h2>Contact</h2>
-            <div class="contact-info">
-                <p>Pour toute information ou sollicitation :</p>
-                <p>📧 Email: contact@josephyule.cd</p>
-                <p>📍 Kisangani, Tshopo - RDC</p>
-            </div>
-        </section>
-    </div>
-
-    <footer>
-        <div class="container">
-            <p>&copy; 2024 Honorable Joseph Yule - Tous droits réservés</p>
+    <!-- Hero Section -->
+    <section id="accueil" class="hero">
+        <div class="hero-content">
+            <h1>Honorable Joseph Yule Mutu ya Batu</h1>
+            <p>Député Provincial de la Tshopo - République Démocratique du Congo</p>
+            <p>Servir avec intégrité, travailler pour le développement</p>
+            <a href="#apropos" class="btn">En savoir plus</a>
         </div>
-    </footer>
+    </section>
 
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script>
-        // Initialisation de la carte
-        var map = L.map('map').setView([-2.8797, 23.6560], 5);
-        
-        // Ajout des tuiles OpenStreetMap
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap contributors'
-        }).addTo(map);
+    <!-- À Propos Section -->
+    <section id="apropos" class="section about">
+        <div class="container">
+            <h2 class="section-title">À Propos</h2>
+            <div class="about-content">
+                <div class="about-image">
+                    <!-- Photo de profil officielle -->
+                    <img src="https://photos.app.goo.gl/fnwojgqqauJLDQNj7" alt="Honorable Joseph Yule Mutu ya Batu - Député Provincial de la Tshopo">
+                </div>
+                <div class="about-text">
+                    <h2>Biographie</h2>
+                    <p>L'Honorable Joseph Yule Mutu ya Batu est un acteur politique engagé, actuellement Député Provincial de la Tshopo en République Démocratique du Congo. Son parcours est marqué par un dévouement constant au service de sa communauté et de sa province.</p>
+                    <p>Élu pour représenter les intérêts de la population de la Tshopo, il s'engage résolument dans la promotion du développement socio-économique, l'amélioration des conditions de vie des citoyens et la défense des valeurs démocratiques.</p>
+                    <p>Son action politique se fonde sur les principes de transparence, d'intégrité et de proximité avec les populations qu'il représente.</p>
+                    <a href="#contact" class="btn">Prendre contact</a>
+                </div>
+            </div>
+        </div>
+    </section>
 
-        // Ajout des marqueurs pour les projets
-        L.marker([0.5153, 25.1900]).addTo(map)
-            .bindPopup("<b>Lubunga – Kisangani</b><br>15 km de routes asphaltées et éclairage public")
-            .openPopup();
-
-        L.marker([-2.5000, 28.8600]).addTo(map)
-            .bindPopup("<b>Bukavu</b><br>Consultation sur la sécurité fluviale");
-
-        L.marker([2.765, 24.990]).addTo(map)
-            .bindPopup("<b>Bas-Uélé</b><br>Soutien aux chefs coutumiers");
-
-        L.marker([-4.3000, 15.3000]).addTo(map)
-            .bindPopup("<b>Kinshasa</b><br>Participation aux sessions parlementaires");
-
-        L.marker([-1.6700, 29.2200]).addTo(map)
-            .bindPopup("<b>Goma</b><br>Échanges sur le développement régional");
-
-        // Animation au défilement
-        document.addEventListener('DOMContentLoaded', function() {
-            const observerOptions = {
-                threshold: 0.1,
-                rootMargin: '0px 0px -50px 0px'
-            };
-
-            const observer = new IntersectionObserver(function(entries) {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.style.opacity = '1';
-                        entry.target.style.transform = 'translateY(0)';
-                    }
-                });
-            }, observerOptions);
-
-            // Observer les cartes d'articles
-            document.querySelectorAll('.article-card').forEach(card => {
-                card.style.opacity = '0';
-                card.style.transform = 'translateY(20px)';
-                card.style.transition = 'opacity 0.6s ease, transform 0.6s ease
+    <!-- Activités Section -->
+    <section id="activites" class="section activities">
+        <div class="container">
+            <h2 cla
